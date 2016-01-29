@@ -2,6 +2,8 @@ gulp-xliff-to-carbon-i18n [![Build Status](https://travis-ci.org/Collaborne/gulp
 =========
 Plugin for gulp to convert XLIFF 1.2 files into JS files for use with [Collaborne/carbon-i18n-behavior](https://github.com/Collaborne/carbon-i18n-behavior)
 
+_[Blog post explaining the plugin](https://medium.com/collaborne-engineering/localize-polymer-applications-with-a-translation-agency-b3291b574c85)_
+
 ## Installation
 
 	$ npm install --save-dev gulp-xliff-to-carbon-i18n
@@ -39,5 +41,3 @@ gulp.task('process-xliff-files', function() {
     WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
     License for the specific language governing permissions and limitations under
     the License.
-    
-
