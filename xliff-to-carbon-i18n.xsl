@@ -40,7 +40,7 @@
 			</xsl:choose>
 		</xsl:variable>
 
-!function() {
+!(function() {
 	Polymer.CarbonI18nBehaviorLocales.add('<xsl:value-of select="$basename"/>', '<xsl:value-of select="$language"/>', {
 		<!--
 		xliff:group elements contain the xliff:trans-unit elements. We ignore the groups, they are there to help
@@ -76,7 +76,7 @@
 		<xsl:value-of select="@resname"/>: <xsl:value-of select="$quote"/><xsl:value-of select="$value"/><xsl:value-of select="$quote"/>,
 		</xsl:for-each>
 	});
-}();
+})();
 	</xsl:template>
 
 </xsl:stylesheet>
