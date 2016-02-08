@@ -49,6 +49,19 @@
 		for us here.
 		  -->
 		<xsl:for-each select="*/xliff:trans-unit">
+			<xsl:call-template name="generate-code">
+				<xsl:with-param name="source-language" select="$source-language"/>
+				<xsl:with-param name="target-language" select="$target-language"/>
+			</xsl:call-template>
+		</xsl:for-each>
+	});
+})();
+	</xsl:template>
+
+	<xsl:template name="generate-code">
+		<xsl:param name="source-language"/>
+		<xsl:param name="target-language"/>
+
 		<xsl:if test="xliff:note">
 		/** <xsl:value-of select="xliff:note"/> */
 		</xsl:if>
@@ -74,9 +87,5 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:value-of select="@resname"/>: <xsl:value-of select="$quote"/><xsl:value-of select="$value"/><xsl:value-of select="$quote"/>,
-		</xsl:for-each>
-	});
-})();
 	</xsl:template>
-
 </xsl:stylesheet>
