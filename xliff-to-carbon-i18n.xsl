@@ -41,6 +41,8 @@
 		</xsl:variable>
 
 !(function() {
+	'use strict';
+
 	Polymer.CarbonI18nBehaviorLocales.add('<xsl:value-of select="$basename"/>', '<xsl:value-of select="$language"/>', {
 		<!--
 		xliff:group elements contain the xliff:trans-unit elements. We ignore the groups, they are there to help
