@@ -49,10 +49,17 @@
 		for us here.
 		  -->
 		<xsl:for-each select="*/xliff:trans-unit">
-			<xsl:call-template name="generate-code">
-				<xsl:with-param name="source-language" select="$source-language"/>
-				<xsl:with-param name="target-language" select="$target-language"/>
-			</xsl:call-template>
+			<xsl:choose>
+				<xsl:when test="@id=preceding-sibling::xliff:trans-unit/@id">
+					<xsl:message>WARN: Duplicate id <xsl:value-of select="@id"/></xsl:message>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="generate-code">
+						<xsl:with-param name="source-language" select="$source-language"/>
+						<xsl:with-param name="target-language" select="$target-language"/>
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:for-each>
 	});
 })();
