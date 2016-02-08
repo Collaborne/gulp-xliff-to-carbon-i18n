@@ -40,7 +40,7 @@
 			</xsl:choose>
 		</xsl:variable>
 
-!(function() {
+;(function() {
 	'use strict';
 
 	Polymer.CarbonI18nBehaviorLocales.add('<xsl:value-of select="$basename"/>', '<xsl:value-of select="$language"/>', {
