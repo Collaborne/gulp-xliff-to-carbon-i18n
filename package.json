@@ -1,6 +1,6 @@
 {
   "name": "gulp-xliff-to-carbon-i18n",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "gulp plugin to transform XLIFF into Collaborne/carbon-i18n-behavior-compatible JS files",
   "main": "index.js",
   "repository": {
