@@ -3,7 +3,9 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd"
+	xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-strict.xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	exclude-result-prefixes="xs"
 	version="1.0">
 
 	<xsl:output method="text"/>
@@ -17,6 +19,14 @@
 	If `true`, then generate a JS file based on the source data.
 	  -->
 	<xsl:param name="use-source">false</xsl:param>
+
+	<!--
+	Path to the XLIFF 1.2 core schema.
+	Optional, but may be required when the processor is unable to know its own path.
+	  -->
+	<xsl:param name="xliff-schema-uri" select="xliff-core-1.2-strict.xsd"/>
+	<xsl:variable name="xliff-schema" select="document($xliff-schema-uri)"/>
+	<xsl:variable name="default-xml-space" select="$xliff-schema//xs:element[@name='trans-unit']/xs:complexType/xs:attribute[@ref='xml:space']/@default"/>
 
 	<xsl:template match="xliff:file">
 		<xsl:apply-templates>
@@ -87,6 +97,18 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+		<xsl:variable name="xml-space">
+			<xsl:choose>
+				<xsl:when test="@xml:space"><xsl:value-of select="@xml:space"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="$default-xml-space"/></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="stripped-value">
+			<xsl:choose>
+				<xsl:when test="$xml-space='preserve'"><xsl:value-of select="$value"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="normalize-space($value)"/></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<!-- Work around some quoting issues in XPath 1.0, see http://stackoverflow.com/a/12404176/196315 -->
 		<xsl:variable name="apos">'</xsl:variable>
 		<xsl:variable name="quote">
@@ -95,6 +117,6 @@
 				<xsl:otherwise>'</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:value-of select="@resname"/>: <xsl:value-of select="$quote"/><xsl:value-of select="$value"/><xsl:value-of select="$quote"/>,
+		<xsl:value-of select="@resname"/>: <xsl:value-of select="$quote"/><xsl:value-of select="$stripped-value"/><xsl:value-of select="$quote"/>,
 	</xsl:template>
 </xsl:stylesheet>

@@ -37,7 +37,11 @@ module.exports = function(config) {
 		try {
 			var document = libxslt.libxmljs.parseXml(file.contents);
 			var language = document.get('/xliff:xliff/xliff:file/@' + (useSource ? 'source-language' : 'target-language'), { 'xliff': 'urn:oasis:names:tc:xliff:document:1.2'}).value();
-			var contents =  stylesheet.apply(document, { 'use-source': useSource ? 'true' : 'false', 'basename': path.basename(file.path, '.xliff') }, { outputFormat: 'string' });
+			var contents =  stylesheet.apply(document, {
+				'use-source': useSource ? 'true' : 'false',
+				'basename': path.basename(file.path, '.xliff'),
+				'xliff-schema-uri': path.join(__dirname, 'xliff-core-1.2-strict.xsd')
+			}, { outputFormat: 'string' });
 
 			var resultFile = new gutil.File({
 				base: file.base,

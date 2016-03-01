@@ -1,0 +1,2 @@
+# Explicitly override npm's default of using .gitignore
+# We don't want the XLIFF schema in git, but we don't want it in the package.
