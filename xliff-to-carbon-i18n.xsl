@@ -77,6 +77,25 @@
 })();
 	</xsl:template>
 
+	<xsl:template name="escape-quotes">
+		<xsl:param name="string"/>
+
+		<xsl:choose>
+			<xsl:when test="contains($string, &quot;&apos;&quot;)">
+				<xsl:variable name="before" select="substring-before($string, &quot;&apos;&quot;)"/>
+				<xsl:variable name="after">
+					<xsl:call-template name="escape-quotes">
+						<xsl:with-param name="string" select="substring-after($string, &quot;&apos;&quot;)"/>
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:value-of select="concat($before, &quot;\&apos;&quot;, $after)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$string"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 	<xsl:template name="generate-code">
 		<xsl:param name="source-language"/>
 		<xsl:param name="target-language"/>
@@ -109,14 +128,11 @@
 				<xsl:otherwise><xsl:value-of select="normalize-space($value)"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<!-- Work around some quoting issues in XPath 1.0, see http://stackoverflow.com/a/12404176/196315 -->
-		<xsl:variable name="apos">'</xsl:variable>
-		<xsl:variable name="quote">
-			<xsl:choose>
-				<xsl:when test="contains($value, $apos)">"</xsl:when>
-				<xsl:otherwise>'</xsl:otherwise>
-			</xsl:choose>
+		<xsl:variable name="escaped-value">
+			<xsl:call-template name="escape-quotes">
+				<xsl:with-param name="string" select="$stripped-value"/>
+			</xsl:call-template>
 		</xsl:variable>
-		<xsl:value-of select="@resname"/>: <xsl:value-of select="$quote"/><xsl:value-of select="$stripped-value"/><xsl:value-of select="$quote"/>,
+		<xsl:value-of select="@resname"/>: '<xsl:value-of select="$escaped-value"/>',
 	</xsl:template>
 </xsl:stylesheet>
