@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+	<file source-language="en" datatype="plaintext" target-language="en-test">
+		<body>
+			<group id="test">
+				<trans-unit id="test-basic" resname="basic">
+					<source xml:lang="en">TEST</source>
+				</trans-unit>
+				<trans-unit id="test-single_quotes" resname="single_quotes">
+					<source xml:lang="en">Foo'Bar</source>
+				</trans-unit>
+				<trans-unit id="test-double_quotes" resname="double_quotes">
+					<source xml:lang="en">Foo"Bar</source>
+				</trans-unit>
+			</group>
+		</body>
+	</file>
+</xliff>
