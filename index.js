@@ -19,7 +19,10 @@ module.exports = function(config) {
 		throw new Error(e.message);
 	}
 
+	// Whether to use the <source> or <target> elements
 	var useSource = config ? config.useSource : false;
+	// Whether to add the language code to the output file name before the extension
+	var addLanguageCode = config ? config.addLanguageCode : true;
 
 	function processXLIFF(file, cb) {
 		function throwError(message) {
@@ -46,7 +49,7 @@ module.exports = function(config) {
 			var resultFile = new gutil.File({
 				base: file.base,
 				cwd: file.cwd,
-				path: gutil.replaceExtension(file.path, '.' + language + '.i18n.js'),
+				path: gutil.replaceExtension(file.path, (addLanguageCode ? '.' + language : '' ) + '.i18n.js'),
 				contents: new Buffer(contents)
 			});
 			return cb(null, resultFile);
