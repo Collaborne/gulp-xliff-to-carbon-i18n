@@ -40,9 +40,10 @@ module.exports = function(config) {
 		try {
 			var document = libxslt.libxmljs.parseXml(file.contents);
 			var language = document.get('/xliff:xliff/xliff:file/@' + (useSource ? 'source-language' : 'target-language'), { 'xliff': 'urn:oasis:names:tc:xliff:document:1.2'}).value();
+			var originalNode = document.get('/xliff:xliff/xliff:file/@original', { 'xliff': 'urn:oasis:names:tc:xliff:document:1.2'});
 			var contents =  stylesheet.apply(document, {
 				'use-source': useSource ? 'true' : 'false',
-				'basename': path.basename(file.path, '.xliff'),
+				'basename': originalNode ? originalNode.value() : path.basename(file.path, '.xliff'),
 				'xliff-schema-uri': path.join(__dirname, 'xliff-core-1.2-strict.xsd')
 			}, { outputFormat: 'string' });
 
