@@ -105,14 +105,14 @@
 		</xsl:if>
 		<xsl:variable name="value">
 			<xsl:choose>
-				<xsl:when test="$use-source='false' and xliff:target[@xml:lang=$target-language]">
-					<xsl:value-of select="xliff:target[@xml:lang=$target-language]"/>
+				<xsl:when test="$use-source='false' and xliff:target[not(@xml:lang) or @xml:lang=$target-language]">
+					<xsl:value-of select="xliff:target[not(@xml:lang) or @xml:lang=$target-language]"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:if test="$use-source='false'">
 						<xsl:message>WARN: Missing translation for <xsl:value-of select="../@id"/>.<xsl:value-of select="@id"/></xsl:message>
 					</xsl:if>
-					<xsl:value-of select="xliff:source[@xml:lang=$source-language]"/>
+					<xsl:value-of select="xliff:source[not(@xml:lang) or @xml:lang=$source-language]"/>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
