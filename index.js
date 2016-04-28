@@ -39,7 +39,10 @@ module.exports = function(config) {
 
 		try {
 			var document = libxslt.libxmljs.parseXml(file.contents);
-			var language = document.get('/xliff:xliff/xliff:file/@' + (useSource ? 'source-language' : 'target-language'), { 'xliff': 'urn:oasis:names:tc:xliff:document:1.2'}).value();
+			var languageNode = document.get('/xliff:xliff/xliff:file/@' + (useSource ? 'source-language' : 'target-language'), { 'xliff': 'urn:oasis:names:tc:xliff:document:1.2'});
+			if (!languageNode) {
+				return throwError('Missing language definition in XLIFF');
+			}
 			var originalNode = document.get('/xliff:xliff/xliff:file/@original', { 'xliff': 'urn:oasis:names:tc:xliff:document:1.2'});
 			var contents =  stylesheet.apply(document, {
 				'use-source': useSource ? 'true' : 'false',
@@ -50,7 +53,7 @@ module.exports = function(config) {
 			var resultFile = new gutil.File({
 				base: file.base,
 				cwd: file.cwd,
-				path: gutil.replaceExtension(file.path, (addLanguageCode ? '.' + language : '' ) + '.i18n.js'),
+				path: gutil.replaceExtension(file.path, (addLanguageCode ? '.' + languageNode.value() : '' ) + '.i18n.js'),
 				contents: new Buffer(contents)
 			});
 			return cb(null, resultFile);
