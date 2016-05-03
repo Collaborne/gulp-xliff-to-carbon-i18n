@@ -24,9 +24,12 @@
     "libxslt": "^0.6.3"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
     "url-download": "^0.0.4"
   },
   "scripts": {
+    "test": "mocha test/test.js",
     "prepublish": "node build/download-schema.js"
   }
 }
