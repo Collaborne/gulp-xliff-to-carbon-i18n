@@ -37,7 +37,7 @@ describe('gulp-xliff-to-carbon-i18n', function() {
 		 * @param {vinyl} file the Vinyl file to process
 		 * @param {function} expectations callback, invoked with the `locales` parameter
 		 */
-		function process(file, expectations) {
+		function executePlugin(file, expectations) {
 			var stream = xliff2js.apply();
 			stream.on('data', function(file) {
 				var results = file.contents.toString();
@@ -51,28 +51,28 @@ describe('gulp-xliff-to-carbon-i18n', function() {
 		}
 
 		it('should handle single quotes', function(done) {
-			process(samples, function(locales) {
+			executePlugin(samples, function(locales) {
 				expect(locales['samples']['en-test']['single_quotes']).to.be.equal('Foo\'Bar');
 				done();
 			});
 		});
 
 		it('should handle embedded newlines', function(done) {
-			process(samples, function(locales) {
+			executePlugin(samples, function(locales) {
 				expect(locales['samples']['en-test']['newlines']).to.be.equal('Foo\nBar');
 				done();
 			});
 		});
 
 		it('should honor xml:space="preserve"', function(done) {
-			process(samples, function(locales) {
+			executePlugin(samples, function(locales) {
 				expect(locales['samples']['en-test']['xml_space_preserve']).to.match(/\s+non-translatable\s+/);
 				done();
 			});
 		});
 
 		it('should honor xml:space="default"', function(done) {
-			process(samples, function(locales) {
+			executePlugin(samples, function(locales) {
 				expect(locales['samples']['en-test']['xml_space_default']).to.be.equal('non-translatable');
 				done();
 			});
