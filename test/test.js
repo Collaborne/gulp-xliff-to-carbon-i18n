@@ -34,11 +34,12 @@ describe('gulp-xliff-to-carbon-i18n', function() {
 		/**
 		 * Process `file` and check expectations.
 		 *
+		 * @param {Object} opts plugin options
 		 * @param {vinyl} file the Vinyl file to process
 		 * @param {function} expectations callback, invoked with the `locales` parameter
 		 */
-		function executePlugin(file, expectations) {
-			var stream = xliff2js.apply();
+		function executePlugin(opts, file, expectations) {
+			var stream = xliff2js.call(xliff2js, opts);
 			stream.on('data', function(file) {
 				var results = file.contents.toString();
 				eval(results);
@@ -51,28 +52,28 @@ describe('gulp-xliff-to-carbon-i18n', function() {
 		}
 
 		it('should handle single quotes', function(done) {
-			executePlugin(samples, function(locales) {
+			executePlugin({}, samples, function(locales) {
 				expect(locales['samples']['en-test']['single_quotes']).to.be.equal('Foo\'Bar');
 				done();
 			});
 		});
 
 		it('should handle embedded newlines', function(done) {
-			executePlugin(samples, function(locales) {
+			executePlugin({}, samples, function(locales) {
 				expect(locales['samples']['en-test']['newlines']).to.be.equal('Foo\nBar');
 				done();
 			});
 		});
 
 		it('should honor xml:space="preserve"', function(done) {
-			executePlugin(samples, function(locales) {
+			executePlugin({}, samples, function(locales) {
 				expect(locales['samples']['en-test']['xml_space_preserve']).to.match(/\s+non-translatable\s+/);
 				done();
 			});
 		});
 
 		it('should honor xml:space="default"', function(done) {
-			executePlugin(samples, function(locales) {
+			executePlugin({}, samples, function(locales) {
 				expect(locales['samples']['en-test']['xml_space_default']).to.be.equal('non-translatable');
 				done();
 			});
