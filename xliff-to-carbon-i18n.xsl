@@ -5,7 +5,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-strict.xsd"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	exclude-result-prefixes="xs"
+	xmlns:exsl="http://exslt.org/common"
+	exclude-result-prefixes="xs exsl"
 	version="1.0">
 
 	<xsl:output method="text"/>
@@ -96,9 +97,33 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<!-- Apply "strip white-space only text nodes" to a specific node -->
+	<xsl:template name="strip-space">
+		<xsl:param name="node"/>
+
+		<xsl:for-each select="exsl:node-set($node)">
+			<xsl:if test="not(self::text() and normalize-space(.) = '')">
+				<xsl:copy>
+					<xsl:for-each select="child::node()">
+						<xsl:call-template name="strip-space">
+							<xsl:with-param name="node" select="."/>
+						</xsl:call-template>
+					</xsl:for-each>
+				</xsl:copy>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:template>
+
 	<xsl:template name="generate-code">
 		<xsl:param name="source-language"/>
 		<xsl:param name="target-language"/>
+
+		<xsl:variable name="xml-space">
+			<xsl:choose>
+				<xsl:when test="@xml:space"><xsl:value-of select="@xml:space"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="$default-xml-space"/></xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 
 		<xsl:if test="xliff:note">
 		/** <xsl:value-of select="xliff:note"/> */
@@ -106,26 +131,22 @@
 		<xsl:variable name="value">
 			<xsl:choose>
 				<xsl:when test="$use-source='false' and xliff:target[not(@xml:lang) or @xml:lang=$target-language]">
-					<xsl:value-of select="xliff:target[not(@xml:lang) or @xml:lang=$target-language]"/>
+					<xsl:copy-of select="xliff:target[not(@xml:lang) or @xml:lang=$target-language]"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:if test="$use-source='false'">
 						<xsl:message>WARN: Missing translation for <xsl:value-of select="../@id"/>.<xsl:value-of select="@id"/></xsl:message>
 					</xsl:if>
-					<xsl:value-of select="xliff:source[not(@xml:lang) or @xml:lang=$source-language]"/>
+					<xsl:copy-of select="xliff:source[not(@xml:lang) or @xml:lang=$source-language]"/>
 				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:variable name="xml-space">
-			<xsl:choose>
-				<xsl:when test="@xml:space"><xsl:value-of select="@xml:space"/></xsl:when>
-				<xsl:otherwise><xsl:value-of select="$default-xml-space"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="stripped-value">
 			<xsl:choose>
 				<xsl:when test="$xml-space='preserve'"><xsl:value-of select="$value"/></xsl:when>
-				<xsl:otherwise><xsl:value-of select="normalize-space($value)"/></xsl:otherwise>
+				<xsl:otherwise><xsl:call-template name="strip-space">
+					<xsl:with-param name="node" select="$value"/>
+				</xsl:call-template></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="escaped-value">
