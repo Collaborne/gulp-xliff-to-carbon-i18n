@@ -61,5 +61,19 @@ describe('gulp-xliff-to-carbon-i18n', function() {
 				done();
 			});
 		});
+
+		it('should honor xml:space="preserve"', function(done) {
+			process(samples, function(locales) {
+				expect(locales['samples']['en-test']['xml_space_preserve']).to.match(/\s+non-translatable\s+/);
+				done();
+			});
+		});
+
+		it('should honor xml:space="default"', function(done) {
+			process(samples, function(locales) {
+				expect(locales['samples']['en-test']['xml_space_default']).to.be.equal('non-translatable');
+				done();
+			});
+		});
 	});
 });

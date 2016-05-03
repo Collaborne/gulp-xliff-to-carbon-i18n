@@ -19,6 +19,16 @@
 					<source>Foo
 Bar</source>
 				</trans-unit>
+				<trans-unit id="test-xml_space_preserve" resname="xml_space_preserve" xml:space="preserve">
+					<source>
+						<mrk mtype="protected">non-translatable</mrk>
+					</source>
+				</trans-unit>
+				<trans-unit id="test-xml_space_default" resname="xml_space_default" xml:space="default">
+					<source>
+						<mrk mtype="protected">non-translatable</mrk>
+					</source>
+				</trans-unit>
 			</group>
 		</body>
 	</file>
