@@ -15,6 +15,10 @@
 				<trans-unit id="test-source_lang" resname="source_lang">
 					<source xml:lang="en">Foo</source>
 				</trans-unit>
+				<trans-unit id="test-newlines" resname="newlines">
+					<source>Foo
+Bar</source>
+				</trans-unit>
 			</group>
 		</body>
 	</file>

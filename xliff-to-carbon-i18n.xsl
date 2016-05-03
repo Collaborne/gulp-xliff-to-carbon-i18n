@@ -81,15 +81,29 @@
 	<xsl:template name="escape-quotes">
 		<xsl:param name="string"/>
 
+		<xsl:call-template name="replace">
+			<xsl:with-param name="string" select="$string"/>
+			<xsl:with-param name="what">'</xsl:with-param>
+			<xsl:with-param name="replacement">\'</xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template name="replace">
+		<xsl:param name="string"/>
+		<xsl:param name="what"/>
+		<xsl:param name="replacement"/>
+
 		<xsl:choose>
-			<xsl:when test="contains($string, &quot;&apos;&quot;)">
-				<xsl:variable name="before" select="substring-before($string, &quot;&apos;&quot;)"/>
+			<xsl:when test="contains($string, $what)">
+				<xsl:variable name="before" select="substring-before($string, $what)"/>
 				<xsl:variable name="after">
-					<xsl:call-template name="escape-quotes">
-						<xsl:with-param name="string" select="substring-after($string, &quot;&apos;&quot;)"/>
+					<xsl:call-template name="replace">
+						<xsl:with-param name="string" select="substring-after($string, $what)"/>
+						<xsl:with-param name="what" select="$what"/>
+						<xsl:with-param name="replacement" select="$replacement"/>
 					</xsl:call-template>
 				</xsl:variable>
-				<xsl:value-of select="concat($before, &quot;\&apos;&quot;, $after)"/>
+				<xsl:value-of select="concat($before, $replacement, $after)"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$string"/>
@@ -154,6 +168,13 @@
 				<xsl:with-param name="string" select="$stripped-value"/>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:value-of select="@resname"/>: '<xsl:value-of select="$escaped-value"/>',
+		<xsl:variable name="newlines-replaced-value">
+			<xsl:call-template name="replace">
+				<xsl:with-param name="string" select="$escaped-value"/>
+				<xsl:with-param name="what" select="'&#xA;'"/>
+				<xsl:with-param name="replacement">\n</xsl:with-param>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:value-of select="@resname"/>: '<xsl:value-of select="$newlines-replaced-value"/>',
 	</xsl:template>
 </xsl:stylesheet>

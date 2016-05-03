@@ -54,5 +54,12 @@ describe('gulp-xliff-to-carbon-i18n', function() {
 				done();
 			});
 		});
+
+		it('should handle embedded newlines', function(done) {
+			process(samples, function(locales) {
+				expect(locales['samples']['en-test']['newlines']).to.be.equal('Foo\nBar');
+				done();
+			});
+		});
 	});
 });
