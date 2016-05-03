@@ -4,13 +4,16 @@
 		<body>
 			<group id="test">
 				<trans-unit id="test-basic" resname="basic">
-					<source xml:lang="en">TEST</source>
+					<source>TEST</source>
 				</trans-unit>
 				<trans-unit id="test-single_quotes" resname="single_quotes">
-					<source xml:lang="en">Foo'Bar</source>
+					<source>Foo'Bar</source>
 				</trans-unit>
 				<trans-unit id="test-double_quotes" resname="double_quotes">
-					<source xml:lang="en">Foo"Bar</source>
+					<source>Foo"Bar</source>
+				</trans-unit>
+				<trans-unit id="test-source_lang" resname="source_lang">
+					<source xml:lang="en">Foo</source>
 				</trans-unit>
 			</group>
 		</body>
