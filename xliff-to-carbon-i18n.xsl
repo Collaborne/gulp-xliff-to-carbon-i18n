@@ -22,6 +22,11 @@
 	<xsl:param name="use-source">false</xsl:param>
 
 	<!--
+	If set: the language to use, otherwise detect based on 'use-source'
+	  -->
+	<xsl:param name="override-language"></xsl:param>
+
+	<!--
 	Path to the XLIFF 1.2 core schema.
 	Optional, but may be required when the processor is unable to know its own path.
 	  -->
@@ -30,9 +35,15 @@
 	<xsl:variable name="default-xml-space" select="$xliff-schema//xs:element[@name='trans-unit']/xs:complexType/xs:attribute[@ref='xml:space']/@default"/>
 
 	<xsl:template match="xliff:file">
+		<xsl:variable name="target-language">
+			<xsl:choose>
+				<xsl:when test="string-length($override-language) > 0"><xsl:value-of select="$override-language"/></xsl:when>
+				<xsl:otherwise><xsl:value-of select="@target-language"/></xsl:otherwise>
+			</xsl:choose>				
+		</xsl:variable>
 		<xsl:apply-templates>
 			<xsl:with-param name="source-language" select="@source-language"/>
-			<xsl:with-param name="target-language" select="@target-language"/>
+			<xsl:with-param name="target-language" select="$target-language"/>
 		</xsl:apply-templates>
 	</xsl:template>
 

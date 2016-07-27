@@ -78,5 +78,12 @@ describe('gulp-xliff-to-carbon-i18n', function() {
 				done();
 			});
 		});
+
+		it('should use overrideLanguage option', function(done) {
+			executePlugin({ overrideLanguage: 'fr'}, samples, function(locales) {
+				expect(locales['samples']['fr']['basic']).to.be.equal('TEST');
+				done();
+			});
+		});
 	});
 });
