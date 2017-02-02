@@ -5,6 +5,7 @@
 			<group id="test">
 				<trans-unit id="test-basic" resname="basic">
 					<source>TEST</source>
+					<target>TEST-target</target>
 				</trans-unit>
 				<trans-unit id="test-single_quotes" resname="single_quotes">
 					<source>Foo'Bar</source>

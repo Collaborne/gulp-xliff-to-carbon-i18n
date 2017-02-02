@@ -52,36 +52,36 @@ describe('gulp-xliff-to-carbon-i18n', function() {
 		}
 
 		it('should handle single quotes', function(done) {
-			executePlugin({}, samples, function(locales) {
-				expect(locales['samples']['en-test']['single_quotes']).to.be.equal('Foo\'Bar');
+			executePlugin({ useSource: true }, samples, function(locales) {
+				expect(locales['samples']['en']['single_quotes']).to.be.equal('Foo\'Bar');
 				done();
 			});
 		});
 
 		it('should handle embedded newlines', function(done) {
-			executePlugin({}, samples, function(locales) {
-				expect(locales['samples']['en-test']['newlines']).to.be.equal('Foo\nBar');
+			executePlugin({ useSource: true }, samples, function(locales) {
+				expect(locales['samples']['en']['newlines']).to.be.equal('Foo\nBar');
 				done();
 			});
 		});
 
 		it('should honor xml:space="preserve"', function(done) {
-			executePlugin({}, samples, function(locales) {
-				expect(locales['samples']['en-test']['xml_space_preserve']).to.match(/\s+non-translatable\s+/);
+			executePlugin({ useSource: true }, samples, function(locales) {
+				expect(locales['samples']['en']['xml_space_preserve']).to.match(/\s+non-translatable\s+/);
 				done();
 			});
 		});
 
 		it('should honor xml:space="default"', function(done) {
-			executePlugin({}, samples, function(locales) {
-				expect(locales['samples']['en-test']['xml_space_default']).to.be.equal('non-translatable');
+			executePlugin({ useSource: true }, samples, function(locales) {
+				expect(locales['samples']['en']['xml_space_default']).to.be.equal('non-translatable');
 				done();
 			});
 		});
 
 		it('should use overrideLanguage option', function(done) {
 			executePlugin({ overrideLanguage: 'fr'}, samples, function(locales) {
-				expect(locales['samples']['fr']['basic']).to.be.equal('TEST');
+				expect(locales['samples']['fr']['basic']).to.be.equal('TEST-target');
 				done();
 			});
 		});
