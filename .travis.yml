@@ -5,3 +5,9 @@ group: beta
 language: node_js
 node_js:
   - node
+
+cache:
+  directories:
+  - node_modules
+before_install:
+- if [ -d node_modules ] && [ x$(cat node_modules/.last-node-version 2>/dev/null) != x$(node -e 'console.log(process.version)') ]; then npm rebuild && node -e 'console.log(process.version)' > node_modules/.last-node-version; fi
