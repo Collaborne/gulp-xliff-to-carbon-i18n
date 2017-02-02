@@ -21,6 +21,8 @@ module.exports = function(config) {
 
 	// Whether to use the <source> or <target> elements
 	var useSource = config ? config.useSource : false;
+	// Whether to fallback to the <source> elements when there is no <target> elements
+	var useSourceFallback = config ? config.useSourceFallback : false;
 	// Whether to add the language code to the output file name before the extension
 	var addLanguageCode = config ? config.addLanguageCode : true;
 	// Explicit language instead of auto-detection
@@ -52,6 +54,7 @@ module.exports = function(config) {
 			var originalNode = document.get('/xliff:xliff/xliff:file/@original', { 'xliff': 'urn:oasis:names:tc:xliff:document:1.2'});
 			var contents =  stylesheet.apply(document, {
 				'use-source': useSource ? 'true' : 'false',
+				'use-source-fallback': useSourceFallback ? 'true' : 'false',
 				'override-language': overrideLanguage,
 				'basename': originalNode ? originalNode.value() : path.basename(file.path, '.xliff'),
 				'xliff-schema-uri': path.join(__dirname, 'xliff-core-1.2-strict.xsd')

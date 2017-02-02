@@ -31,6 +31,13 @@
 	Optional, but may be required when the processor is unable to know its own path.
 	  -->
 	<xsl:param name="xliff-schema-uri" select="xliff-core-1.2-strict.xsd"/>
+
+	<!--
+	If `true`: use values from the `source` elements when there is no `target` element.
+	This should be set to true only when the reader of the produced JSON doesn't implement any other fallback mechanism.
+	  -->
+	<xsl:param name="use-source-fallback">false</xsl:param>
+
 	<xsl:variable name="xliff-schema" select="document($xliff-schema-uri)"/>
 	<xsl:variable name="default-xml-space" select="$xliff-schema//xs:element[@name='trans-unit']/xs:complexType/xs:attribute[@ref='xml:space']/@default"/>
 
@@ -149,43 +156,45 @@
 				<xsl:otherwise><xsl:value-of select="$default-xml-space"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-
-		<xsl:if test="xliff:note">
-		/** <xsl:value-of select="xliff:note"/> */
+		
+		<xsl:if test="($use-source='false' and xliff:target[not(@xml:lang) or @xml:lang=$target-language]) or $use-source='true' or $use-source-fallback='true'">
+			<xsl:if test="xliff:note">
+			/** <xsl:value-of select="xliff:note"/> */
+			</xsl:if>
+			<xsl:variable name="value">
+				<xsl:choose>
+					<xsl:when test="$use-source='false' and xliff:target[not(@xml:lang) or @xml:lang=$target-language]">
+						<xsl:copy-of select="xliff:target[not(@xml:lang) or @xml:lang=$target-language]"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:if test="$use-source='false'">
+							<xsl:message>WARN: Missing translation for <xsl:value-of select="../@id"/>.<xsl:value-of select="@id"/></xsl:message>
+						</xsl:if>
+						<xsl:copy-of select="xliff:source[not(@xml:lang) or @xml:lang=$source-language]"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:variable name="stripped-value">
+				<xsl:choose>
+					<xsl:when test="$xml-space='preserve'"><xsl:value-of select="$value"/></xsl:when>
+					<xsl:otherwise><xsl:call-template name="strip-space">
+						<xsl:with-param name="node" select="$value"/>
+					</xsl:call-template></xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable>
+			<xsl:variable name="escaped-value">
+				<xsl:call-template name="escape-quotes">
+					<xsl:with-param name="string" select="$stripped-value"/>
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:variable name="newlines-replaced-value">
+				<xsl:call-template name="replace">
+					<xsl:with-param name="string" select="$escaped-value"/>
+					<xsl:with-param name="what" select="'&#xA;'"/>
+					<xsl:with-param name="replacement">\n</xsl:with-param>
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:value-of select="@resname"/>: '<xsl:value-of select="$newlines-replaced-value"/>',
 		</xsl:if>
-		<xsl:variable name="value">
-			<xsl:choose>
-				<xsl:when test="$use-source='false' and xliff:target[not(@xml:lang) or @xml:lang=$target-language]">
-					<xsl:copy-of select="xliff:target[not(@xml:lang) or @xml:lang=$target-language]"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:if test="$use-source='false'">
-						<xsl:message>WARN: Missing translation for <xsl:value-of select="../@id"/>.<xsl:value-of select="@id"/></xsl:message>
-					</xsl:if>
-					<xsl:copy-of select="xliff:source[not(@xml:lang) or @xml:lang=$source-language]"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:variable name="stripped-value">
-			<xsl:choose>
-				<xsl:when test="$xml-space='preserve'"><xsl:value-of select="$value"/></xsl:when>
-				<xsl:otherwise><xsl:call-template name="strip-space">
-					<xsl:with-param name="node" select="$value"/>
-				</xsl:call-template></xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:variable name="escaped-value">
-			<xsl:call-template name="escape-quotes">
-				<xsl:with-param name="string" select="$stripped-value"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="newlines-replaced-value">
-			<xsl:call-template name="replace">
-				<xsl:with-param name="string" select="$escaped-value"/>
-				<xsl:with-param name="what" select="'&#xA;'"/>
-				<xsl:with-param name="replacement">\n</xsl:with-param>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:value-of select="@resname"/>: '<xsl:value-of select="$newlines-replaced-value"/>',
 	</xsl:template>
 </xsl:stylesheet>
