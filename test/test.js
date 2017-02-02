@@ -85,5 +85,30 @@ describe('gulp-xliff-to-carbon-i18n', function() {
 				done();
 			});
 		});
+
+		it('should fallback to source when enabled', function(done) {
+			executePlugin({ useSourceFallback: true }, samples, function(locales) {
+				expect(locales['samples']['en-test']['no_target']).to.be.equal('source');
+				done();
+			});			
+		});
+		it('should not provide translation to source when fallback not enabled', function(done) {
+			executePlugin({ }, samples, function(locales) {
+				expect(locales['samples']['en-test']['no_target']).to.be.undefined;
+				done();
+			});			
+		});
+		it('should not provide translation to source when fallback is disabled', function(done) {
+			executePlugin({ useSourceFallback: false }, samples, function(locales) {
+				expect(locales['samples']['en-test']['no_target']).to.be.undefined;
+				done();
+			});			
+		});
+		it('should provide available target when fallback is enabled', function(done) {
+			executePlugin({ useSourceFallback: true }, samples, function(locales) {
+				expect(locales['samples']['en-test']['target']).to.be.equal('target');
+				done();
+			});			
+		});
 	});
 });

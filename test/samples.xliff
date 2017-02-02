@@ -30,6 +30,13 @@ Bar</source>
 						<mrk mtype="protected">non-translatable</mrk>
 					</source>
 				</trans-unit>
+				<trans-unit id="test_target" resname="target">
+					<source>source</source>
+					<target>target</target>
+				</trans-unit>
+				<trans-unit id="test_no_target" resname="no_target">
+					<source>source</source>
+				</trans-unit>				
 			</group>
 		</body>
 	</file>
