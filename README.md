@@ -1,5 +1,5 @@
-gulp-xliff-to-carbon-i18n [![Build Status](https://travis-ci.org/Collaborne/gulp-xliff-to-carbon-i18n.svg?branch=master)](https://travis-ci.org/Collaborne/gulp-xliff-to-carbon-i18n)
-=========
+# gulp-xliff-to-carbon-i18n [![Build Status](https://travis-ci.org/Collaborne/gulp-xliff-to-carbon-i18n.svg?branch=master)](https://travis-ci.org/Collaborne/gulp-xliff-to-carbon-i18n) [![Greenkeeper badge](https://badges.greenkeeper.io/Collaborne/gulp-xliff-to-carbon-i18n.svg)](https://greenkeeper.io/)
+
 Plugin for gulp to convert XLIFF 1.2 files into JS files for use with [Collaborne/carbon-i18n-behavior](https://github.com/Collaborne/carbon-i18n-behavior)
 
 _[Blog post explaining the plugin](https://medium.com/collaborne-engineering/localize-polymer-applications-with-a-translation-agency-b3291b574c85)_
