@@ -30,6 +30,7 @@
   },
   "scripts": {
     "test": "mocha test/test.js",
-    "prepublish": "node build/download-schema.js"
+    "prepublish": "node build/download-schema.js",
+    "preinstall": "node build/abort-if-broken-npm.js"
   }
 }
