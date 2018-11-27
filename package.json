@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/Collaborne/gulp-xliff-to-carbon-i18n#readme",
   "dependencies": {
-    "event-stream": "^3.3.2",
+    "event-stream": "3.3.4",
     "gulp-util": "^3.0.7",
     "libxslt": "^0.7.0"
   },
